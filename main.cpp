@@ -37,13 +37,17 @@ public :
     {
         return root == NULL;
     }
+    int retCount()
+    {
+        return count;
+    }
     void clr()
     {
         root = NULL;
         count = 0;
     }
     void insert();
-    void search();
+    void search(char []);
     void display(node *);
     void remove(char []);
 };
@@ -114,9 +118,47 @@ void dictionary::insert()
     }
 }
 
-void dictionary::search()
+void dictionary::search(char key[])
 {
+    node *p;
+    if(isEmpty())
+    {
+        cout<<"\nEmpty tree!";
 
+    }
+    else
+    {
+        p = root;
+        while(p!=NULL)
+        {
+            if(key<p->word)
+            {
+                if(p->left==NULL)
+                {
+                    return false;
+                }
+                else
+                {
+                    p = p->left;
+                }
+            }
+            else if (key>p->word)
+            {
+                if(p->right==NULL)
+                {
+                    return false;
+                }
+                else
+                {
+                    p = p->right;
+                }
+            }
+            else
+            {
+                return true;
+            }
+        }
+    }
 }
 
 void dictionary::display(node *s)
@@ -124,7 +166,7 @@ void dictionary::display(node *s)
     if(s!=NULL)
     {
         display(s->left);
-        cout<<"\t"<<s->word<<","<<s->meaning;
+        cout<<"\t"<<s->word<<"="<<s->meaning<<",";
         display(s->right);
     }
 }
@@ -259,19 +301,20 @@ void dictionary::remove(char d[])
 
 int main() {
     dictionary obj;
-    int ch,key;
+    int ch;
+    char key[LIMIT];
     char choice;
     cout<<"\nProgram to perform Various operation on Binary Search Tree.";
     do
     {
-        ch = key = 0;
+        ch = 0;
         choice = 'n';
         cout<<"\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
         cout<<"\n 1 for Insertion";
-        cout<<"\n 2 for In order Traversal";
-        cout<<"\n 3 for Pre order Traversal";
-        cout<<"\n 4 for Post order Traversal";
-        cout<<"\n 5 to  Display Root Node";
+        cout<<"\n 2 to  Display Dictionary";
+        cout<<"\n 3 to  Search a word";
+        cout<<"\n 4 to  Remove a word";
+        cout<<"\n 5 for Word Count";
         cout<<"\n -1 to Clear whole Tree";
         cout<<"\n 0 to  Quit";
         cout<<"\nEnter your choice : ";
@@ -279,50 +322,20 @@ int main() {
         cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
         switch(ch)
         {
-            case 1 : obj.construct();
+            case 1 : obj.insert();
                 break;
-            case 2 : cout<<"\nIn order Traversal is ";
-                obj.inOrder(obj.retRoot());
+            case 2 : cout<<"\nWords included are \n";
+                obj.display(obj.retRoot());
                 break;
-            case 3 : cout<<"\nPre order Traversal is ";
-                obj.postOrder(obj.retRoot());
-                break;
-            case 4 : cout<<"\nPost order Traversal is ";
-                obj.preOrder(obj.retRoot());
-                break;
-            case 5 : if(!obj.isEmpty())
-                    cout<<"\nRoot Node is "<<obj.retRoot()->data;
-                else
-                    cout<<"\nEmpty Tree!";
-                break;
-            case 6 : cout<<"\nNo. of Nodes in Tree are "<<obj.retSize();
-                break;
-            case 7 : cout<<"\nIn order Interative is ";
-                obj.in_itr(obj.retRoot());
-                break;
-            case 8 : cout<<"\nPre order Interative is ";
-                obj.pre_itr(obj.retRoot());
-                break;
-            case 9 : cout<<"\nPost order Interative is ";
-                obj.post_itr(obj.retRoot());
-                break;
-            case 10 : cout<<"\nEnter the search term : ";
+            case 3 : cout<<"\nEnter the search term : ";
                 cin>>key;
-                if(obj.search(key))
-                    cout<<"\nKey Found!";
-                else
-                    cout<<"\nKey NOT found.";
+                obj.search(key);
                 break;
-            case 11 : cout<<"\nEnter the term to delete : ";
+            case 4 : cout<<"\nEnter the word to delete : ";
                 cin>>key;
                 obj.remove(key);
                 break;
-            case 14 : cout<<"\nThe height of tree is "<<obj.height(obj.retRoot());
-                break;
-            case 15 : cout<<"\nTotal No. of Leaves are "<<obj.retLeaves();
-                break;
-            case 16 : obj.swap(obj.retRoot());
-                cout<<"\nNodes Swapped Successfully!";
+            case 5 : cout<<"\nTotal No. of Words are "<<obj.retCount();
                 break;
             case -1: cout<<"\nAre you sure you want to clear tree (y/n) ? ";
                 cin>>choice;
@@ -348,6 +361,5 @@ int main() {
     }while(ch!=0);
 
     cout<<"\nThank you for using this program :) \n\n";
-    return 0;
     return 0;
 }
