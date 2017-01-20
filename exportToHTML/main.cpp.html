@@ -29,9 +29,456 @@ main.cpp</FONT>
  
 </span><span class="s4">using namespace </span><span class="s1">std; 
  
-</span><span class="s4">int </span><span class="s1">main() { 
-    cout &lt;&lt; </span><span class="s3">&quot;Hello, World!&quot; </span><span class="s1">&lt;&lt; endl; 
+</span><span class="s2">#define </span><span class="s1">LIMIT </span><span class="s5">999</span><span class="s1"> 
+ 
+</span><span class="s0">//Function Prototypes</span><span class="s1"> 
+</span><span class="s4">int </span><span class="s1">stringCompare(</span><span class="s4">char </span><span class="s1">[],</span><span class="s4">char </span><span class="s1">[]); 
+</span><span class="s4">void </span><span class="s1">stringCopy(</span><span class="s4">char </span><span class="s1">[],</span><span class="s4">char </span><span class="s1">[]); 
+ 
+</span><span class="s0">//Class Definitions</span><span class="s1"> 
+</span><span class="s4">class </span><span class="s1">node                                                              </span><span class="s0">//Node Class</span><span class="s1"> 
+{ 
+</span><span class="s4">public </span><span class="s1">: 
+    </span><span class="s4">char </span><span class="s1">word[LIMIT],meaning[LIMIT]; 
+    node *left,*right; 
+}; 
+ 
+</span><span class="s4">class </span><span class="s1">dictionary                                                        </span><span class="s0">//Dictionary Class</span><span class="s1"> 
+{ 
+    </span><span class="s4">int </span><span class="s1">count; 
+    node *root; 
+    node *create(); 
+</span><span class="s4">public </span><span class="s1">: 
+    dictionary() 
+    { 
+        root = NULL; 
+        count = </span><span class="s5">0</span><span class="s1">; 
+    } 
+    </span><span class="s4">inline </span><span class="s1">node *retRoot() 
+    { 
+        </span><span class="s4">return </span><span class="s1">root; 
+    } 
+    </span><span class="s4">inline bool </span><span class="s1">isEmpty() 
+    { 
+        </span><span class="s4">return </span><span class="s1">root == NULL; 
+    } 
+    </span><span class="s4">inline int </span><span class="s1">retCount() 
+    { 
+        </span><span class="s4">return </span><span class="s1">count; 
+    } 
+    </span><span class="s4">void </span><span class="s1">clr() 
+    { 
+        root = NULL; 
+        count = </span><span class="s5">0</span><span class="s1">; 
+    } 
+    </span><span class="s4">void </span><span class="s1">insert(); 
+    </span><span class="s4">void </span><span class="s1">search(</span><span class="s4">char </span><span class="s1">[]); 
+    </span><span class="s4">void </span><span class="s1">display(node *); 
+    </span><span class="s4">void </span><span class="s1">remove(</span><span class="s4">char </span><span class="s1">[]); 
+    </span><span class="s4">void </span><span class="s1">update(</span><span class="s4">char </span><span class="s1">[]); 
+}; 
+ 
+node *dictionary::create()                                                  </span><span class="s0">//Creates a word</span><span class="s1"> 
+{ 
+    node *temp; 
+    temp = </span><span class="s4">new </span><span class="s1">node; 
+ 
+    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Enter word </span><span class="s4">\t</span><span class="s3">: &quot;</span><span class="s1">; 
+    cin&gt;&gt;temp-&gt;word; 
+    cout&lt;&lt;</span><span class="s3">&quot;Enter meaning : &quot;</span><span class="s1">; 
+    cin&gt;&gt;temp-&gt;meaning; 
+    temp-&gt;left = NULL; 
+    temp-&gt;right = NULL; 
+ 
+    count++; 
+    </span><span class="s4">return </span><span class="s1">temp; 
+} 
+ 
+</span><span class="s4">void </span><span class="s1">dictionary::insert()                                                  </span><span class="s0">//Inserts the word</span><span class="s1"> 
+{ 
+    node *temp,*p; 
+    temp = create(); 
+    </span><span class="s4">if</span><span class="s1">(isEmpty()) 
+    { 
+        root = temp; 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Root word Inserted!&quot;</span><span class="s1">; 
+    } 
+    </span><span class="s4">else</span><span class="s1"> 
+    { 
+        p = root; 
+        </span><span class="s4">while</span><span class="s1">(p!=NULL) 
+        { 
+            </span><span class="s4">if</span><span class="s1">(stringCompare(temp-&gt;word,p-&gt;word)==-</span><span class="s5">1</span><span class="s1">) 
+            { 
+                </span><span class="s4">if</span><span class="s1">(p-&gt;left==NULL) 
+                { 
+                    p-&gt;left = temp; 
+                    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Word Inserted!&quot;</span><span class="s1">; 
+                    </span><span class="s4">break</span><span class="s1">; 
+                } 
+                </span><span class="s4">else</span><span class="s1"> 
+                { 
+                    p = p-&gt;left; 
+                } 
+            } 
+            </span><span class="s4">else if </span><span class="s1">(stringCompare(temp-&gt;word,p-&gt;word)==</span><span class="s5">1</span><span class="s1">) 
+            { 
+                </span><span class="s4">if</span><span class="s1">(p-&gt;right==NULL) 
+                { 
+                    p-&gt;right = temp; 
+                    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Word Inserted!&quot;</span><span class="s1">; 
+                    </span><span class="s4">break</span><span class="s1">; 
+                } 
+                </span><span class="s4">else</span><span class="s1"> 
+                { 
+                    p = p-&gt;right; 
+                } 
+            } 
+            </span><span class="s4">else</span><span class="s1"> 
+            { 
+                cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Entry already Exist&quot;</span><span class="s1">; 
+                count--; 
+                </span><span class="s4">break</span><span class="s1">; 
+            } 
+        } 
+    } 
+} 
+ 
+</span><span class="s4">void </span><span class="s1">dictionary::search(</span><span class="s4">char </span><span class="s1">key[])                                                </span><span class="s0">//Search a word</span><span class="s1"> 
+{ 
+    node *p; 
+    </span><span class="s4">if</span><span class="s1">(isEmpty()) 
+    { 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Empty tree!&quot;</span><span class="s1">; 
+ 
+    } 
+    </span><span class="s4">else</span><span class="s1"> 
+    { 
+        p = root; 
+        </span><span class="s4">while</span><span class="s1">(p!=NULL) 
+        { 
+            </span><span class="s4">if</span><span class="s1">(stringCompare(key,p-&gt;word)==-</span><span class="s5">1</span><span class="s1">) 
+            { 
+                </span><span class="s4">if</span><span class="s1">(p-&gt;left==NULL) 
+                { 
+                    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Word NOT Found!&quot;</span><span class="s1">; 
+                    </span><span class="s4">return</span><span class="s1">; 
+                } 
+                </span><span class="s4">else</span><span class="s1"> 
+                { 
+                    p = p-&gt;left; 
+                } 
+            } 
+            </span><span class="s4">else if </span><span class="s1">(stringCompare(key,p-&gt;word)==</span><span class="s5">1</span><span class="s1">) 
+            { 
+                </span><span class="s4">if</span><span class="s1">(p-&gt;right==NULL) 
+                { 
+                    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Word NOT Found!&quot;</span><span class="s1">; 
+                    </span><span class="s4">return</span><span class="s1">; 
+                } 
+                </span><span class="s4">else</span><span class="s1"> 
+                { 
+                    p = p-&gt;right; 
+                } 
+            } 
+            </span><span class="s4">else</span><span class="s1"> 
+            { 
+                cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Meaning of &quot;</span><span class="s1">&lt;&lt;p-&gt;word&lt;&lt;</span><span class="s3">&quot; is &quot;</span><span class="s1">&lt;&lt;p-&gt;meaning; 
+                </span><span class="s4">return</span><span class="s1">; 
+            } 
+        } 
+    } 
+} 
+ 
+</span><span class="s4">void </span><span class="s1">dictionary::update(</span><span class="s4">char </span><span class="s1">key[])                                                </span><span class="s0">//Update a word</span><span class="s1"> 
+{ 
+    node *p; 
+    </span><span class="s4">if</span><span class="s1">(isEmpty()) 
+    { 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Empty tree!&quot;</span><span class="s1">; 
+    } 
+    </span><span class="s4">else</span><span class="s1"> 
+    { 
+        p = root; 
+        </span><span class="s4">while</span><span class="s1">(p!=NULL) 
+        { 
+            </span><span class="s4">if</span><span class="s1">(stringCompare(key,p-&gt;word)==-</span><span class="s5">1</span><span class="s1">) 
+            { 
+                </span><span class="s4">if</span><span class="s1">(p-&gt;left==NULL) 
+                { 
+                    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Word NOT Found!&quot;</span><span class="s1">; 
+                    </span><span class="s4">return</span><span class="s1">; 
+                } 
+                </span><span class="s4">else</span><span class="s1"> 
+                { 
+                    p = p-&gt;left; 
+                } 
+            } 
+            </span><span class="s4">else if </span><span class="s1">(stringCompare(key,p-&gt;word)==</span><span class="s5">1</span><span class="s1">) 
+            { 
+                </span><span class="s4">if</span><span class="s1">(p-&gt;right==NULL) 
+                { 
+                    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Word NOT Found!&quot;</span><span class="s1">; 
+                    </span><span class="s4">return</span><span class="s1">; 
+                } 
+                </span><span class="s4">else</span><span class="s1"> 
+                { 
+                    p = p-&gt;right; 
+                } 
+            } 
+            </span><span class="s4">else</span><span class="s1"> 
+            { 
+                cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Enter new Meaning of &quot;</span><span class="s1">&lt;&lt;p-&gt;word&lt;&lt;</span><span class="s3">&quot; : &quot;</span><span class="s1">; 
+                cin&gt;&gt;p-&gt;meaning; 
+                cout&lt;&lt;</span><span class="s3">&quot;Word Updated Successfully!&quot;</span><span class="s1">; 
+                </span><span class="s4">return</span><span class="s1">; 
+            } 
+        } 
+    } 
+} 
+ 
+</span><span class="s4">void </span><span class="s1">dictionary::display(node *s)                                           </span><span class="s0">//Display Dictionary</span><span class="s1"> 
+{ 
+    </span><span class="s4">if</span><span class="s1">(s!=NULL) 
+    { 
+        display(s-&gt;left); 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\t</span><span class="s3">&quot;</span><span class="s1">&lt;&lt;s-&gt;word&lt;&lt;</span><span class="s3">&quot;=&quot;</span><span class="s1">&lt;&lt;s-&gt;meaning&lt;&lt;</span><span class="s3">&quot;,&quot;</span><span class="s1">; 
+        display(s-&gt;right); 
+    } 
+} 
+ 
+</span><span class="s4">void </span><span class="s1">dictionary::remove(</span><span class="s4">char </span><span class="s1">d[])                                           </span><span class="s0">//Delete a word</span><span class="s1"> 
+{ 
+    </span><span class="s0">//Locate the element</span><span class="s1"> 
+    </span><span class="s4">bool </span><span class="s1">found = </span><span class="s4">false</span><span class="s1">; 
+    </span><span class="s4">if</span><span class="s1">(isEmpty()) 
+    { 
+        cout&lt;&lt;</span><span class="s3">&quot; This Tree is empty! &quot;</span><span class="s1">&lt;&lt;endl; 
+        </span><span class="s4">return</span><span class="s1">; 
+    } 
+    node *curr; 
+    node *parent=NULL; 
+    curr = root; 
+    </span><span class="s4">while</span><span class="s1">(curr != NULL) 
+    { 
+        </span><span class="s4">if</span><span class="s1">(stringCompare(curr-&gt;word,d)==</span><span class="s5">0</span><span class="s1">) 
+        { 
+            found = </span><span class="s4">true</span><span class="s1">; 
+            count--; 
+            </span><span class="s4">break</span><span class="s1">; 
+        } 
+        </span><span class="s4">else</span><span class="s1"> 
+        { 
+            parent = curr; 
+            </span><span class="s4">if</span><span class="s1">(stringCompare(d,curr-&gt;word)==</span><span class="s5">1</span><span class="s1">) 
+                curr = curr-&gt;right; 
+            </span><span class="s4">else</span><span class="s1"> 
+                curr = curr-&gt;left; 
+        } 
+    } 
+    </span><span class="s4">if</span><span class="s1">(!found) 
+    { 
+        cout&lt;&lt;</span><span class="s3">&quot; Data not found! &quot;</span><span class="s1">&lt;&lt;endl; 
+        </span><span class="s4">return</span><span class="s1">; 
+    } 
+ 
+ 
+    </span><span class="s0">// 3 cases :</span><span class="s1"> 
+    </span><span class="s0">// 1. We're removing a leaf node</span><span class="s1"> 
+    </span><span class="s0">// 2. We're removing a node with a single child</span><span class="s1"> 
+    </span><span class="s0">// 3. we're removing a node with 2 children</span><span class="s1"> 
+ 
+    </span><span class="s0">// Node with single child</span><span class="s1"> 
+    </span><span class="s4">if</span><span class="s1">((curr-&gt;left == NULL &amp;&amp; curr-&gt;right != NULL)|| (curr-&gt;left != NULL &amp;&amp; curr-&gt;right == NULL)) 
+    { 
+        </span><span class="s4">if</span><span class="s1">(curr-&gt;left == NULL &amp;&amp; curr-&gt;right != NULL) 
+        { 
+            </span><span class="s4">if</span><span class="s1">(parent-&gt;left == curr) 
+            { 
+                parent-&gt;left = curr-&gt;right; 
+                </span><span class="s4">delete </span><span class="s1">curr; 
+            } 
+            </span><span class="s4">else</span><span class="s1"> 
+            { 
+                parent-&gt;right = curr-&gt;right; 
+                </span><span class="s4">delete </span><span class="s1">curr; 
+            } 
+        } 
+        </span><span class="s4">else </span><span class="s0">// left child present, no right child</span><span class="s1"> 
+        { 
+            </span><span class="s4">if</span><span class="s1">(parent-&gt;left == curr) 
+            { 
+                parent-&gt;left = curr-&gt;left; 
+                </span><span class="s4">delete </span><span class="s1">curr; 
+            } 
+            </span><span class="s4">else</span><span class="s1"> 
+            { 
+                parent-&gt;right = curr-&gt;left; 
+                </span><span class="s4">delete </span><span class="s1">curr; 
+            } 
+        } 
+        </span><span class="s4">return</span><span class="s1">; 
+    } 
+ 
+    </span><span class="s0">//We're looking at a leaf node</span><span class="s1"> 
+    </span><span class="s4">if</span><span class="s1">( curr-&gt;left == NULL &amp;&amp; curr-&gt;right == NULL) 
+    { 
+        </span><span class="s4">if</span><span class="s1">(parent-&gt;left == curr) parent-&gt;left = NULL; 
+        </span><span class="s4">else </span><span class="s1">parent-&gt;right = NULL; 
+        </span><span class="s4">delete </span><span class="s1">curr; 
+        </span><span class="s4">return</span><span class="s1">; 
+    } 
+ 
+ 
+    </span><span class="s0">//Node with 2 children</span><span class="s1"> 
+    </span><span class="s0">// replace node with smallest value in right subtree</span><span class="s1"> 
+    </span><span class="s4">if </span><span class="s1">(curr-&gt;left != NULL &amp;&amp; curr-&gt;right != NULL) 
+    { 
+        node *chkr; 
+        chkr = curr-&gt;right; 
+        </span><span class="s4">if</span><span class="s1">((chkr-&gt;left == NULL) &amp;&amp; (chkr-&gt;right == NULL)) 
+        { 
+            curr = chkr; 
+            </span><span class="s4">delete </span><span class="s1">chkr; 
+            curr-&gt;right = NULL; 
+        } 
+        </span><span class="s4">else </span><span class="s0">// right child has children</span><span class="s1"> 
+        { 
+            </span><span class="s0">//if the node's right child has a left child</span><span class="s1"> 
+            </span><span class="s0">// Move all the way down left to locate smallest element</span><span class="s1"> 
+ 
+            </span><span class="s4">if</span><span class="s1">((curr-&gt;right)-&gt;left != NULL) 
+            { 
+                node *lcurr; 
+                node *lcurrp; 
+                lcurrp = curr-&gt;right; 
+                lcurr = (curr-&gt;right)-&gt;left; 
+                </span><span class="s4">while</span><span class="s1">(lcurr-&gt;left != NULL) 
+                { 
+                    lcurrp = lcurr; 
+                    lcurr = lcurr-&gt;left; 
+                } 
+                stringCopy(curr-&gt;word,lcurr-&gt;word); 
+                </span><span class="s4">delete </span><span class="s1">lcurr; 
+                lcurrp-&gt;left = NULL; 
+            } 
+            </span><span class="s4">else</span><span class="s1"> 
+            { 
+                node *tmp; 
+                tmp = curr-&gt;right; 
+                stringCopy(curr-&gt;word,tmp-&gt;word); 
+                curr-&gt;right = tmp-&gt;right; 
+                </span><span class="s4">delete </span><span class="s1">tmp; 
+            } 
+ 
+        } 
+        </span><span class="s4">return</span><span class="s1">; 
+    } 
+} 
+ 
+ 
+</span><span class="s0">//main()</span><span class="s1"> 
+</span><span class="s4">int </span><span class="s1">main()                                                                          </span><span class="s0">//main()</span><span class="s1"> 
+{ 
+    dictionary obj; 
+    </span><span class="s4">int </span><span class="s1">ch; 
+    </span><span class="s4">char </span><span class="s1">key[LIMIT]; 
+    </span><span class="s4">char </span><span class="s1">choice; 
+    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Program to perform Various operation on Binary Search Tree.&quot;</span><span class="s1">; 
+    </span><span class="s4">do</span><span class="s1"> 
+    { 
+        ch = </span><span class="s5">0</span><span class="s1">; 
+        choice = </span><span class="s3">'n'</span><span class="s1">; 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n\n</span><span class="s3">~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~&quot;</span><span class="s1">; 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3"> 1 to  Insert a word&quot;</span><span class="s1">; 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3"> 2 to  Display Dictionary&quot;</span><span class="s1">; 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3"> 3 to  Search a word&quot;</span><span class="s1">; 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3"> 4 to  Remove a word&quot;</span><span class="s1">; 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3"> 5 to  Update the word&quot;</span><span class="s1">; 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3"> 6 for Word Count&quot;</span><span class="s1">; 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3"> -1 to Clear whole Tree&quot;</span><span class="s1">; 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3"> 0 to  Quit&quot;</span><span class="s1">; 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Enter your choice : &quot;</span><span class="s1">; 
+        cin&gt;&gt;ch; 
+        cout&lt;&lt;</span><span class="s3">&quot;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span><span class="s4">\n</span><span class="s3">&quot;</span><span class="s1">; 
+        </span><span class="s4">switch</span><span class="s1">(ch) 
+        { 
+            </span><span class="s4">case </span><span class="s5">1 </span><span class="s1">: obj.insert(); 
+                </span><span class="s4">break</span><span class="s1">; 
+            </span><span class="s4">case </span><span class="s5">2 </span><span class="s1">: cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Words included are </span><span class="s4">\n</span><span class="s3">&quot;</span><span class="s1">; 
+                obj.display(obj.retRoot()); 
+                </span><span class="s4">break</span><span class="s1">; 
+            </span><span class="s4">case </span><span class="s5">3 </span><span class="s1">: cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Enter the Search term : &quot;</span><span class="s1">; 
+                cin&gt;&gt;key; 
+                obj.search(key); 
+                </span><span class="s4">break</span><span class="s1">; 
+            </span><span class="s4">case </span><span class="s5">4 </span><span class="s1">: cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Enter the word to Delete : &quot;</span><span class="s1">; 
+                cin&gt;&gt;key; 
+                obj.remove(key); 
+                </span><span class="s4">break</span><span class="s1">; 
+            </span><span class="s4">case </span><span class="s5">5 </span><span class="s1">: cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Enter the word to Update : &quot;</span><span class="s1">; 
+                cin&gt;&gt;key; 
+                obj.update(key); 
+                </span><span class="s4">break</span><span class="s1">; 
+            </span><span class="s4">case </span><span class="s5">6 </span><span class="s1">: cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Total No. of Words are &quot;</span><span class="s1">&lt;&lt;obj.retCount(); 
+                </span><span class="s4">break</span><span class="s1">; 
+            </span><span class="s4">case </span><span class="s1">-</span><span class="s5">1</span><span class="s1">: cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Are you sure you want to clear tree (y/n) ? &quot;</span><span class="s1">; 
+                cin&gt;&gt;choice; 
+                </span><span class="s4">if</span><span class="s1">(choice==</span><span class="s3">'y'</span><span class="s1">||choice==</span><span class="s3">'Y'</span><span class="s1">) 
+                { 
+                    obj.clr(); 
+                    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Tree Cleared Successfully!&quot;</span><span class="s1">; 
+                } 
+                </span><span class="s4">else</span><span class="s1"> 
+                    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Cancelled!&quot;</span><span class="s1">; 
+            </span><span class="s4">case </span><span class="s5">0 </span><span class="s1">: </span><span class="s4">break</span><span class="s1">; 
+            </span><span class="s4">default </span><span class="s1">: cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Invalid Option!&quot;</span><span class="s1">; 
+        } 
+ 
+        </span><span class="s0">/* 
+        if(ch!=0) 
+        { 
+            cout&lt;&lt;&quot;\n\n\n\n\n\n\nPress any key to continue...&quot;; 
+            cin.ignore(); 
+            cin.get(); 
+        } 
+        */</span><span class="s1"> 
+    }</span><span class="s4">while</span><span class="s1">(ch!=</span><span class="s5">0</span><span class="s1">); 
+ 
+    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Thank you for using this program :) </span><span class="s4">\n\n</span><span class="s3">&quot;</span><span class="s1">; 
     </span><span class="s4">return </span><span class="s5">0</span><span class="s1">; 
+} 
+ 
+</span><span class="s0">//Various Functions</span><span class="s1"> 
+</span><span class="s4">int </span><span class="s1">stringCompare(</span><span class="s4">char </span><span class="s1">a[],</span><span class="s4">char </span><span class="s1">b[]) 
+{ 
+    </span><span class="s4">int </span><span class="s1">i,len=</span><span class="s5">0</span><span class="s1">,len2=</span><span class="s5">0</span><span class="s1">; 
+    </span><span class="s4">for</span><span class="s1">(i=</span><span class="s5">0</span><span class="s1">;a[i]!=</span><span class="s3">'</span><span class="s4">\0</span><span class="s3">'</span><span class="s1">;i++) 
+        len++; 
+    </span><span class="s4">for</span><span class="s1">(i=</span><span class="s5">0</span><span class="s1">;b[i]!=</span><span class="s3">'</span><span class="s4">\0</span><span class="s3">'</span><span class="s1">;i++) 
+        len2++; 
+    </span><span class="s4">if</span><span class="s1">(len!=len2) 
+        </span><span class="s4">return </span><span class="s5">1</span><span class="s1">; 
+    </span><span class="s4">for</span><span class="s1">(i=</span><span class="s5">0</span><span class="s1">;i&lt;len;i++) 
+    { 
+        </span><span class="s4">if</span><span class="s1">(a[i]&lt;b[i]) 
+        { 
+            </span><span class="s4">return </span><span class="s1">-</span><span class="s5">1</span><span class="s1">; 
+        } 
+        </span><span class="s4">else if</span><span class="s1">(a[i]&gt;b[i]) 
+        { 
+            </span><span class="s4">return </span><span class="s5">1</span><span class="s1">; 
+        } 
+    } 
+    </span><span class="s4">return </span><span class="s5">0</span><span class="s1">; 
+} 
+ 
+</span><span class="s4">void </span><span class="s1">stringCopy(</span><span class="s4">char </span><span class="s1">a[],</span><span class="s4">char </span><span class="s1">b[]) 
+{ 
+    </span><span class="s4">for</span><span class="s1">(</span><span class="s4">int </span><span class="s1">i=</span><span class="s5">0</span><span class="s1">;b[i]!=</span><span class="s3">'</span><span class="s4">\0</span><span class="s3">'</span><span class="s1">;i++) 
+    { 
+        a[i] = b[i]; 
+    } 
 }</span></pre>
 </body>
 </html>

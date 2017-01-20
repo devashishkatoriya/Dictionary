@@ -5,12 +5,16 @@
  */
 
 #include <iostream>
-#include <cstring>
 
 using namespace std;
 
 #define LIMIT 999
 
+//Function Prototypes
+int stringCompare(char [],char []);
+void stringCopy(char [],char []);
+
+//Class Definitions
 class node                                                              //Node Class
 {
 public :
@@ -29,15 +33,15 @@ public :
         root = NULL;
         count = 0;
     }
-    node *retRoot()
+    inline node *retRoot()
     {
         return root;
     }
-    bool isEmpty()
+    inline bool isEmpty()
     {
         return root == NULL;
     }
-    int retCount()
+    inline int retCount()
     {
         return count;
     }
@@ -50,9 +54,10 @@ public :
     void search(char []);
     void display(node *);
     void remove(char []);
+    void update(char []);
 };
 
-node *dictionary::create()
+node *dictionary::create()                                                  //Creates a word
 {
     node *temp;
     temp = new node;
@@ -68,7 +73,7 @@ node *dictionary::create()
     return temp;
 }
 
-void dictionary::insert()
+void dictionary::insert()                                                  //Inserts the word
 {
     node *temp,*p;
     temp = create();
@@ -82,7 +87,7 @@ void dictionary::insert()
         p = root;
         while(p!=NULL)
         {
-            if(temp->word<p->word)
+            if(stringCompare(temp->word,p->word)==-1)
             {
                 if(p->left==NULL)
                 {
@@ -95,7 +100,7 @@ void dictionary::insert()
                     p = p->left;
                 }
             }
-            else if (temp->word>p->word)
+            else if (stringCompare(temp->word,p->word)==1)
             {
                 if(p->right==NULL)
                 {
@@ -118,7 +123,7 @@ void dictionary::insert()
     }
 }
 
-void dictionary::search(char key[])
+void dictionary::search(char key[])                                                //Search a word
 {
     node *p;
     if(isEmpty())
@@ -131,22 +136,24 @@ void dictionary::search(char key[])
         p = root;
         while(p!=NULL)
         {
-            if(key<p->word)
+            if(stringCompare(key,p->word)==-1)
             {
                 if(p->left==NULL)
                 {
-                    return false;
+                    cout<<"\nWord NOT Found!";
+                    return;
                 }
                 else
                 {
                     p = p->left;
                 }
             }
-            else if (key>p->word)
+            else if (stringCompare(key,p->word)==1)
             {
                 if(p->right==NULL)
                 {
-                    return false;
+                    cout<<"\nWord NOT Found!";
+                    return;
                 }
                 else
                 {
@@ -155,13 +162,61 @@ void dictionary::search(char key[])
             }
             else
             {
-                return true;
+                cout<<"\nMeaning of "<<p->word<<" is "<<p->meaning;
+                return;
             }
         }
     }
 }
 
-void dictionary::display(node *s)
+void dictionary::update(char key[])                                                //Update a word
+{
+    node *p;
+    if(isEmpty())
+    {
+        cout<<"\nEmpty tree!";
+    }
+    else
+    {
+        p = root;
+        while(p!=NULL)
+        {
+            if(stringCompare(key,p->word)==-1)
+            {
+                if(p->left==NULL)
+                {
+                    cout<<"\nWord NOT Found!";
+                    return;
+                }
+                else
+                {
+                    p = p->left;
+                }
+            }
+            else if (stringCompare(key,p->word)==1)
+            {
+                if(p->right==NULL)
+                {
+                    cout<<"\nWord NOT Found!";
+                    return;
+                }
+                else
+                {
+                    p = p->right;
+                }
+            }
+            else
+            {
+                cout<<"\nEnter new Meaning of "<<p->word<<" : ";
+                cin>>p->meaning;
+                cout<<"Word Updated Successfully!";
+                return;
+            }
+        }
+    }
+}
+
+void dictionary::display(node *s)                                           //Display Dictionary
 {
     if(s!=NULL)
     {
@@ -171,9 +226,9 @@ void dictionary::display(node *s)
     }
 }
 
-void dictionary::remove(char d[])
+void dictionary::remove(char d[])                                           //Delete a word
 {
-//Locate the element
+    //Locate the element
     bool found = false;
     if(isEmpty())
     {
@@ -185,15 +240,16 @@ void dictionary::remove(char d[])
     curr = root;
     while(curr != NULL)
     {
-        if(strcmp(curr->word,d)==0)
+        if(stringCompare(curr->word,d)==0)
         {
             found = true;
+            count--;
             break;
         }
         else
         {
             parent = curr;
-            if(d>curr->word)
+            if(stringCompare(d,curr->word)==1)
                 curr = curr->right;
             else
                 curr = curr->left;
@@ -281,7 +337,7 @@ void dictionary::remove(char d[])
                     lcurrp = lcurr;
                     lcurr = lcurr->left;
                 }
-                strcpy(curr->word,lcurr->word);
+                stringCopy(curr->word,lcurr->word);
                 delete lcurr;
                 lcurrp->left = NULL;
             }
@@ -289,7 +345,7 @@ void dictionary::remove(char d[])
             {
                 node *tmp;
                 tmp = curr->right;
-                strcpy(curr->word,tmp->word);
+                stringCopy(curr->word,tmp->word);
                 curr->right = tmp->right;
                 delete tmp;
             }
@@ -299,7 +355,10 @@ void dictionary::remove(char d[])
     }
 }
 
-int main() {
+
+//main()
+int main()                                                                          //main()
+{
     dictionary obj;
     int ch;
     char key[LIMIT];
@@ -310,11 +369,12 @@ int main() {
         ch = 0;
         choice = 'n';
         cout<<"\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
-        cout<<"\n 1 for Insertion";
+        cout<<"\n 1 to  Insert a word";
         cout<<"\n 2 to  Display Dictionary";
         cout<<"\n 3 to  Search a word";
         cout<<"\n 4 to  Remove a word";
-        cout<<"\n 5 for Word Count";
+        cout<<"\n 5 to  Update the word";
+        cout<<"\n 6 for Word Count";
         cout<<"\n -1 to Clear whole Tree";
         cout<<"\n 0 to  Quit";
         cout<<"\nEnter your choice : ";
@@ -327,15 +387,19 @@ int main() {
             case 2 : cout<<"\nWords included are \n";
                 obj.display(obj.retRoot());
                 break;
-            case 3 : cout<<"\nEnter the search term : ";
+            case 3 : cout<<"\nEnter the Search term : ";
                 cin>>key;
                 obj.search(key);
                 break;
-            case 4 : cout<<"\nEnter the word to delete : ";
+            case 4 : cout<<"\nEnter the word to Delete : ";
                 cin>>key;
                 obj.remove(key);
                 break;
-            case 5 : cout<<"\nTotal No. of Words are "<<obj.retCount();
+            case 5 : cout<<"\nEnter the word to Update : ";
+                cin>>key;
+                obj.update(key);
+                break;
+            case 6 : cout<<"\nTotal No. of Words are "<<obj.retCount();
                 break;
             case -1: cout<<"\nAre you sure you want to clear tree (y/n) ? ";
                 cin>>choice;
@@ -362,4 +426,36 @@ int main() {
 
     cout<<"\nThank you for using this program :) \n\n";
     return 0;
+}
+
+//Various Functions
+int stringCompare(char a[],char b[])
+{
+    int i,len=0,len2=0;
+    for(i=0;a[i]!='\0';i++)
+        len++;
+    for(i=0;b[i]!='\0';i++)
+        len2++;
+    if(len!=len2)
+        return 1;
+    for(i=0;i<len;i++)
+    {
+        if(a[i]<b[i])
+        {
+            return -1;
+        }
+        else if(a[i]>b[i])
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+void stringCopy(char a[],char b[])
+{
+    for(int i=0;b[i]!='\0';i++)
+    {
+        a[i] = b[i];
+    }
 }
