@@ -8,7 +8,7 @@
 
 using namespace std;
 
-#define LIMIT 9999
+#define LIMIT 99
 
 //Function Prototypes
 int stringCompare(char [],char []);
@@ -115,7 +115,7 @@ void dictionary::insert()                                                  //Ins
             }
             else
             {
-                cout<<"\nEntry already Exist";
+                cout<<"\nWord already Exist!";
                 count--;
                 break;
             }
@@ -207,7 +207,7 @@ void dictionary::update(char key[])                                             
             }
             else
             {
-                cout<<"\nEnter new Meaning of "<<p->word<<" : ";
+                cout<<"Enter new Meaning of "<<p->word<<" : ";
                 cin>>p->meaning;
                 cout<<"\nWord Updated Successfully!";
                 return;
@@ -221,7 +221,7 @@ void dictionary::display(node *s)                                           //Di
     if(s!=NULL)
     {
         display(s->left);
-        cout<<"\t"<<s->word<<"="<<s->meaning<<",";
+        cout<<"\t"<<s->word<<",";
         display(s->right);
     }
 }
@@ -232,7 +232,7 @@ void dictionary::remove(char d[])                                           //De
     bool found = false;
     if(isEmpty())
     {
-        cout<<"\nThe tree is Empty! "<<endl;
+        cout<<"\nThe Dictionary is Empty!";
         return;
     }
     node *curr;
@@ -243,6 +243,7 @@ void dictionary::remove(char d[])                                           //De
         if(stringCompare(curr->word,d)==0)
         {
             found = true;
+            cout<<"\nWord Deleted Successfully!";
             count--;
             break;
         }
@@ -257,15 +258,15 @@ void dictionary::remove(char d[])                                           //De
     }
     if(!found)
     {
-        cout<<"\nWord NOT found! "<<endl;
+        cout<<"\nWord NOT found!";
         return;
     }
 
 
-    // 3 cases :
-    // 1. We're removing a leaf node
-    // 2. We're removing a node with a single child
-    // 3. we're removing a node with 2 children
+    // 3 cases :-
+    // 1. leaf node
+    // 2. node with a single child
+    // 3. node with 2 children
 
     // Node with single child
     if((curr->left == NULL && curr->right != NULL)|| (curr->left != NULL && curr->right == NULL))
@@ -299,11 +300,13 @@ void dictionary::remove(char d[])                                           //De
         return;
     }
 
-    //We're looking at a leaf node
+    //leaf node
     if( curr->left == NULL && curr->right == NULL)
     {
-        if(parent->left == curr) parent->left = NULL;
-        else parent->right = NULL;
+        if(parent->left == curr)
+            parent->left = NULL;
+        else
+            parent->right = NULL;
         delete curr;
         return;
     }
@@ -373,9 +376,11 @@ int main()                                                                      
         cout<<"\n 2 to  Display Dictionary";
         cout<<"\n 3 to  Search a word";
         cout<<"\n 4 to  Remove a word";
-        cout<<"\n 5 to  Update the word";
-        cout<<"\n 6 for Word Count";
-        cout<<"\n -1 to Clear whole Tree";
+        cout<<"\n 5 to  Update a word";
+        cout<<"\n 6 for Total Word Count";
+        cout<<"\n 7 to  Display root word";
+        cout<<"\n 8 to  Check if Empty";
+        cout<<"\n -1 to Clear whole Dictionary";
         cout<<"\n 0 to  Quit";
         cout<<"\nEnter your choice : ";
         cin>>ch;
@@ -400,6 +405,18 @@ int main()                                                                      
                 obj.update(key);
                 break;
             case 6 : cout<<"\nTotal No. of Words are "<<obj.retCount();
+                break;
+            case 7 :
+                if(obj.isEmpty())
+                    cout<<"\nThe dictionary is Empty!";
+                else
+                    cout<<"\nRoot word is "<<obj.retRoot()->word;
+                break;
+            case 8 :
+                if(obj.isEmpty())
+                    cout<<"\nThe dictionary is Empty!";
+                else
+                    cout<<"\nThe dictionary is NOT empty.";
                 break;
             case -1: cout<<"\nAre you sure you want to clear tree (y/n) ? ";
                 cin>>choice;
