@@ -8,7 +8,7 @@
 
 using namespace std;
 
-#define LIMIT 999
+#define LIMIT 9999
 
 //Function Prototypes
 int stringCompare(char [],char []);
@@ -209,7 +209,7 @@ void dictionary::update(char key[])                                             
             {
                 cout<<"\nEnter new Meaning of "<<p->word<<" : ";
                 cin>>p->meaning;
-                cout<<"Word Updated Successfully!";
+                cout<<"\nWord Updated Successfully!";
                 return;
             }
         }
@@ -232,7 +232,7 @@ void dictionary::remove(char d[])                                           //De
     bool found = false;
     if(isEmpty())
     {
-        cout<<" This Tree is empty! "<<endl;
+        cout<<"\nThe tree is Empty! "<<endl;
         return;
     }
     node *curr;
@@ -257,7 +257,7 @@ void dictionary::remove(char d[])                                           //De
     }
     if(!found)
     {
-        cout<<" Data not found! "<<endl;
+        cout<<"\nWord NOT found! "<<endl;
         return;
     }
 
@@ -429,7 +429,7 @@ int main()                                                                      
 }
 
 //Various Functions
-int stringCompare(char a[],char b[])
+int stringCompare(char a[],char b[])                                        //Compares two strings
 {
     int i,len=0,len2=0;
     for(i=0;a[i]!='\0';i++)
@@ -442,17 +442,17 @@ int stringCompare(char a[],char b[])
     {
         if(a[i]<b[i])
         {
-            return -1;
+            return -1;          //a<b
         }
         else if(a[i]>b[i])
         {
-            return 1;
+            return 1;           //a>b
         }
     }
-    return 0;
+    return 0;                   //a==b
 }
 
-void stringCopy(char a[],char b[])
+void stringCopy(char a[],char b[])                                          //Copies one string to another
 {
     for(int i=0;b[i]!='\0';i++)
     {
